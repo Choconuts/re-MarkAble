@@ -24,5 +24,12 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_multiple_choice, arr); //为 Spinner 设置 Adapter
         spinner.setAdapter(adapter);
 
+
+//        MarkTable markTable = MarkTable.load("");
+//        markTable.getArticle();
+//        markTable.findByStart();
+//        MarkTable.Group group;
+//        group.
+
     }
 }
