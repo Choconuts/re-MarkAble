@@ -1,0 +1,7 @@
+package com.example.choconut.re_markable.qcloud.Module;
+
+public class Bm extends Base{
+	public Bm(){
+		serverHost = "bm.api.qcloud.com";
+	}
+}

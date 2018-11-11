@@ -20,6 +20,7 @@ public class MarkTable implements Serializable {
         ENTITY, RELATION, NONE
     }
     private MarkType markType;
+    private boolean uniqueIdCheck = false;
     private DocumentEntity entityDoc;
     private DocumentRelation tripleDoc;
     private LinkedList<Group> article;
@@ -155,6 +156,9 @@ public class MarkTable implements Serializable {
                 }
             }
         }
+    }
+    public void setUniqueIdCheck(boolean uniqueIdCheck) {
+        this.uniqueIdCheck = uniqueIdCheck;
     }
 
     //record
