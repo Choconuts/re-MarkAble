@@ -357,6 +357,11 @@ public class MarkTable implements Serializable {
 
 
     //query
+    public String getString(String groupId) {
+        Group group = findById(groupId);
+        if (group == null) return null;
+        return group.getEntityName();
+    }
     public LinkedList<String> getArticle() {
         LinkedList<String> list = new LinkedList<>();
         for (Group group: article) {
