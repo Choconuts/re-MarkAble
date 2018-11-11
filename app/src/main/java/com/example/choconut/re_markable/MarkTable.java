@@ -87,6 +87,14 @@ public class MarkTable implements Serializable {
         }
         return null;
     }
+    private Group findById(String id) {
+        for (Group group: article) {
+            if (group.id.equals(id)) {
+                return group;
+            }
+        }
+        return null;
+    }
 
     //group 就是一个可以按的语句块，比如"唐纳德·特朗普"
     class Group implements Serializable {
@@ -178,7 +186,7 @@ public class MarkTable implements Serializable {
     }
 
     //query
-    public LinkedList<Group> getArticle() {
+    public LinkedList<Group> getArticleGoups() {
         return article;
     }
     public Document getDocument() {
@@ -346,6 +354,158 @@ public class MarkTable implements Serializable {
         }
         return list;
     }
+
+
+    //query
+    public LinkedList<String> getArticle() {
+        LinkedList<String> list = new LinkedList<>();
+        for (Group group: article) {
+            list.add(group.id);
+        }
+        return list;
+    }
+    LinkedList<Entity> getOccupateEntities(String startId, String endId) {
+        Group groupStart = findById(startId);
+        Group groupEnd = findById(endId);
+        if(groupEnd.wordTokens.getFirst().start < groupStart.wordTokens.getFirst().start) return getOccupateEntities(groupEnd, groupStart);
+        if(groupStart == groupEnd) {
+            return getEntitiesByGroup(groupStart);
+        }
+        int fromIndex = article.indexOf(groupStart);
+        int toIndex = article.indexOf(groupEnd);
+        LinkedList<Group> sublist = (LinkedList<Group>) article.subList(fromIndex, toIndex);
+        LinkedList<Entity> list = new LinkedList<>();
+        for (Group g: sublist) {
+            list.addAll(getEntitiesByGroup(g));
+        }
+        return list;
+    }
+    LinkedList<Triple> getOccupateTriples(String groupStartId, String groupEndId) {
+        Group groupStart = findById(groupStartId);
+        Group groupEnd = findById(groupEndId);
+        if(groupEnd.wordTokens.getFirst().start < groupStart.wordTokens.getFirst().start) return getOccupateTriples(groupEnd, groupStart);
+        if(groupStart == groupEnd) {
+            return getTriplesByGroup(groupStart, SearchMode.ALL);
+        }
+        int fromIndex = article.indexOf(groupStart);
+        int toIndex = article.indexOf(groupEnd);
+        LinkedList<Group> sublist = (LinkedList<Group>) article.subList(fromIndex, toIndex);
+        LinkedList<Triple> list = new LinkedList<>();
+        for (Group g: sublist) {
+            list.addAll(getTriplesByGroup(g, SearchMode.ALL));
+        }
+        return list;
+    }
+
+    //user operation (添加操作会先删除)
+    boolean addEntity(String groupId, String nerTag) {
+        Group group = findById(groupId);
+        if(markType != MarkType.ENTITY) return false;
+        Entity entity = new Entity(group, nerTag);
+        if (deleteEntity(group)) {
+            System.out.print("覆盖了旧的实体！");
+        }
+        entityDoc.insert(entity);
+        group.occupate.add(entity.id);
+        return true;
+    }
+    boolean deleteEntity(String groupId) {
+        Group group = findById(groupId);
+        if(markType != MarkType.ENTITY) return false;
+        try {
+            group.clearEntity();
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    boolean addTriple(String groupLeftId, String groupRightId, String groupRelationId, int relationId) {
+
+        Group groupLeft = findById(groupLeftId);
+        Group groupRight = findById(groupRightId);
+        Group groupRelation = findById(groupRelationId);
+
+        if(groupLeft == null || groupRight == null) return false;
+        Triple triple = new Triple(groupLeft, groupRight, groupRelation, relationId);
+
+        if (deleteTriple(groupLeft, groupRight)) {
+            System.out.print("覆盖了旧的三元组！");
+        }
+        tripleDoc.insert(triple);
+        groupLeft.occupate.add(triple.id);
+        groupRight.occupate.add(triple.id);
+        if (groupRelation != null) {
+            groupRelation.occupate.add(triple.id);
+        }
+        return true;
+    }
+    boolean deleteTriple(String groupLeftId, String groupRightId) {
+        Group groupLeft = findById(groupLeftId);
+        Group groupRight = findById(groupRightId);
+        boolean flag = false;
+        for (String idLeft: groupLeft.occupate){
+            for (String idRight: groupRight.occupate){
+                if (idLeft.equals(idRight)) {
+                    for (Group group: article) {
+                        group.removeRelation(idLeft);
+                    }
+                    tripleDoc.erase(idLeft);
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        return flag;
+    }
+
+    //helper
+    LinkedList<Triple> getTriplesByGroup(String groupId, SearchMode searchMode){
+        Group group = findById(groupId);
+        LinkedList<Triple> list = new LinkedList<>();
+        if (group == null){
+            list.addAll(tripleDoc.triples);
+            return list;
+        }
+        for (String id: group.occupate) {
+            for (Triple t: tripleDoc.triples){
+                switch (searchMode){
+                    case LEFT:
+                        if (t.leftGroupId.equals(id))
+                            list.add(t);
+                    case RIGHT:
+                        if (t.rightGroupId.equals(id))
+                            list.add(t);
+                    case MIDDLE:
+                        if (t.relationGroupId.equals(id))
+                            list.add(t);
+                    case ALL:
+                        if (t.leftGroupId.equals(id) | t.rightGroupId.equals(id) | t.relationGroupId.equals(id))
+                            list.add(t);
+                    case LEFTANDRIGHT:
+                        if (t.leftGroupId.equals(id) | t.rightGroupId.equals(id))
+                            list.add(t);
+                }
+            }
+        }
+        return list;
+    }
+    LinkedList<Entity> getEntitiesByGroup(String groupId){
+        Group group = findById(groupId);
+        LinkedList<Entity> list = new LinkedList<>();
+        if (group == null){
+            list.addAll(entityDoc.entities);
+            return list;
+        }
+        for (String id: group.occupate) {
+            for (Entity e: entityDoc.entities){
+                if (e.groupId.equals(id))
+                    list.add(e);
+            }
+        }
+        return list;
+    }
+
 }
 
 abstract class Document implements Serializable  {
