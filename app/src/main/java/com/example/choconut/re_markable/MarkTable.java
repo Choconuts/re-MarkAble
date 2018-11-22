@@ -51,6 +51,32 @@ public class MarkTable implements Serializable {
         article.add(fromIndex, combinedGroup);
         return combinedGroup;
     }
+
+
+    String combine(String groupStartId, String groupEndId) {
+        Group groupStart = findById(groupStartId);
+        Group groupEnd = findById(groupEndId);
+        if(groupEnd.wordTokens.getFirst().start < groupStart.wordTokens.getFirst().start) return combine(groupEnd, groupStart).id;
+        if(groupStart == groupEnd) {
+            return groupStart.id;
+        }
+        int fromIndex = article.indexOf(groupStart);
+        int toIndex = article.indexOf(groupEnd);
+        LinkedList<Group> sublist = (LinkedList<Group>) article.subList(fromIndex, toIndex);
+        Group combinedGroup = new Group();
+        for (Group g: sublist) {
+            if (markType == MarkType.ENTITY)
+                g.clearEntity();
+            else if (markType == MarkType.RELATION)
+                g.clearRelation();
+            combinedGroup.wordTokens.add(g.wordTokens.getFirst());
+        }
+        article.removeAll(sublist);
+        article.add(fromIndex, combinedGroup);
+        return combinedGroup.id;
+    }
+
+
     void decompose(Group group) {
         if (group.wordTokens.size() <= 1) return;
         int index = article.indexOf(group);
@@ -162,6 +188,7 @@ public class MarkTable implements Serializable {
                 if (!bindGroup(triple)) {
                     System.out.println("Broken Triple");
                 }
+                triple.checked = false;
             }
         }
     }
@@ -429,7 +456,11 @@ public class MarkTable implements Serializable {
 
         Group groupLeft = findById(groupLeftId);
         Group groupRight = findById(groupRightId);
-        Group groupRelation = findById(groupRelationId);
+        Group groupRelation;
+        if (groupRelationId == null)
+            groupRelation = null;
+        else
+            groupRelation = findById(groupRelationId);
 
         if(groupLeft == null || groupRight == null) return false;
         Triple triple = new Triple(groupLeft, groupRight, groupRelation, relationId);
@@ -684,7 +715,7 @@ class DocumentEntity extends Document {
 class Triple implements Serializable  {
     private static final long serialVersionUID = 1L;
     String leftGroupId, rightGroupId, relationGroupId;
-    boolean checked = false;
+    boolean checked = true;
 
     String id;
     int left_start = -1, left_end = -1,
