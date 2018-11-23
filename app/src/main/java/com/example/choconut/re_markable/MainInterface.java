@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.example.choconut.re_markable.MarkTable;
 import com.example.choconut.re_markable.UserHelper;
@@ -78,6 +79,12 @@ public class MainInterface extends AppCompatActivity {
         candidateButton btn =new candidateButton(new ContextThemeWrapper(this,R.style.Widget_AppCompat_Button_Small_mybutton),null);
         btn.setText(text);
         btn.setTextSize(20);
+        btn.setLetterSpacing(0.4f);
+
+        FlowLayout.LayoutParams lp = new FlowLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(3,8,8,3);
+        btn.setLayoutParams(lp);
 
         btn.setGroupId(groupId);
 
