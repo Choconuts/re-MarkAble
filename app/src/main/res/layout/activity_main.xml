@@ -19,12 +19,12 @@
         android:layout_marginRight="10dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="User Name"
+        android:text="hhx"
         app:layout_constraintBottom_toTopOf="@+id/Email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="User Name" />
+        tools:text="hhx" />
 
     <EditText
         android:id="@+id/password"
@@ -42,7 +42,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UseName" />
+        app:layout_constraintTop_toBottomOf="@+id/UseName"
+        android:text="123456"
+        tools:text="123456" />
 
     <Button
         android:id="@+id/loginIn"

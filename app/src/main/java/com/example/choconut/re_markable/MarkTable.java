@@ -130,6 +130,7 @@ public class MarkTable implements Serializable {
         private ArrayList<String> occupate = new ArrayList<>();
         LinkedList<WordToken> wordTokens = new LinkedList<>();
         private Group(WordToken wordToken) {
+            id = Document.genId(24);
             wordTokens.add(wordToken);
         }
         private Group(){

@@ -37,6 +37,7 @@ public class candidateButton extends android.support.v7.widget.AppCompatButton {
                     case MotionEvent.ACTION_DOWN:
                         if(!isChecked){
                             setPressed(true);
+                            isSelected=true;
                             isChecked=true;
                         }else {
                             setPressed(false);
