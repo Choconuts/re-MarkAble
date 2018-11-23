@@ -15,13 +15,10 @@ public class candidateButton extends android.support.v7.widget.AppCompatButton {
     private static String TAG="CandidateButton";
     private boolean isright=false;
     public String groupId;
-    private boolean isSelected=false;
     private boolean isChecked=false;
+    private static boolean isDragging=false;
     public boolean isChecked() {
         return isChecked;
-    }
-    public boolean isSelected() {
-        return isSelected;
     }
     public void SetChecked(){
         this.isChecked=true;
@@ -35,19 +32,52 @@ public class candidateButton extends android.support.v7.widget.AppCompatButton {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        if(!isChecked){
+                        if(!isPressed()){
                             setPressed(true);
-                            isSelected=true;
-                            isChecked=true;
+                            isDragging=true;
                         }else {
                             setPressed(false);
-                            isChecked=false;
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if(isPressed()){
+                            setPressed(false);
+
+                        }else {
+                            setPressed(true);
+
                         }
                         break;
                 }
                 return true;
             }
+
         });
+        setOnHoverListener(new OnHoverListener() {
+            @Override
+            public boolean onHover(View v, MotionEvent event) {
+                int what = event.getAction();
+                switch(what){
+                    case MotionEvent.ACTION_HOVER_ENTER:  //鼠标进入view
+                        if(isDragging){
+                            setPressed(true);
+
+                        }
+                        break;
+                    case MotionEvent.ACTION_HOVER_MOVE:  //鼠标在view上
+                        System.out.println("bottom ACTION_HOVER_MOVE");
+                        break;
+                    case MotionEvent.ACTION_HOVER_EXIT:  //鼠标离开view
+                        if(isDragging){
+                            setPressed(false);
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
+
+
     }
 
     public void setGroupId(String groupId) {
