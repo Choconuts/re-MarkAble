@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,16 +17,30 @@ import com.example.choconut.re_markable.R;
 public class candidateButton extends android.support.v7.widget.AppCompatButton {
     private static String TAG="CandidateButton";
     private boolean isright=false;
+    private boolean isfocus=false;
     public String groupId;
     private boolean isChecked=false;
     private static int firstPressedId=-1;
+    private MainInterface mi;
+
+    public boolean isIsfocus() {
+        return isfocus;
+    }
+
+    public void setIsfocus(boolean isfocus) {
+        this.isfocus = isfocus;
+    }
+
     public boolean isChecked() {
         return isChecked;
     }
     public void SetChecked(){
         this.isChecked=true;
     }
-
+    public String getGroupId(){return groupId;}
+    public void setActivity(MainInterface mi){
+        this.mi=mi;
+    }
     public candidateButton(Context context, AttributeSet attrs){
         super(context,attrs,R.style.Widget_AppCompat_Button_Small_mybutton);
         setFocusable(true);
@@ -38,12 +53,38 @@ public class candidateButton extends android.support.v7.widget.AppCompatButton {
                 switch (event.getAction()){
                     case MotionEvent.ACTION_DOWN:
                         setPressed(true);
-
                         break;
                     case MotionEvent.ACTION_UP:
-                        setPressed(false);
+                        boolean flag=false;
+                        if(isPressed()){
+                            if(mi.left==-1){
+                                setTouch();
+                                mi.setLeft(mi.getNumByID(groupId));
+                                flag=true;
+                            }
+                            else
+                            if(mi.right==-1){
+                                mi.setRight(mi.getNumByID(groupId));
+
+                                mi.connectlr();
+                            }
+                            else{
+                                mi.connectlr();
+                                mi.setRight(mi.getNumByID(groupId));
+                                mi.connectlr();
+                            }
+
+                            if(mi.left==mi.getNumByID(groupId)&&!flag){
+                                setTouch();
+                                mi.setLeft(-1);
+                                mi.setRight(-1);
+                            }
+                        }
                         break;
 
+                    case  MotionEvent.ACTION_OUTSIDE:
+                        setPressed(false);
+                        break;
                 }
                 return false;
             }
@@ -92,4 +133,18 @@ public class candidateButton extends android.support.v7.widget.AppCompatButton {
     public void setIsright(boolean isright) {
         this.isright = isright;
     }
+
+
+
+    public void setTouch(){
+        if(isIsfocus()){
+            setBackgroundResource(R.drawable.buttombg);
+            setIsfocus(false);
+        }
+        else {
+            setBackgroundResource(R.drawable.buttonbg1);
+            setIsfocus(true);
+        }
+    }
+
 }

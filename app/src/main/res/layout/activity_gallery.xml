@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Gallery">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.activitylife.MainActivity"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/entity"
+            android:layout_width="match_parent"
+            android:background="@drawable/entity"
+            android:layout_height="100dp"
+            android:textSize="20sp"
+            android:text="实体标注"/>
+
+
+        <Button
+            android:id="@+id/relation"
+            android:background="@drawable/relation"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="关系标注"/>
+        <Button
+            android:id="@+id/loginOut"
+            android:background="@drawable/blue"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:text="退出登录"/>
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

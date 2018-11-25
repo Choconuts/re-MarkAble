@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class MarkTable implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -62,7 +63,8 @@ public class MarkTable implements Serializable {
         }
         int fromIndex = article.indexOf(groupStart);
         int toIndex = article.indexOf(groupEnd);
-        LinkedList<Group> sublist = (LinkedList<Group>) article.subList(fromIndex, toIndex);
+        LinkedList<Group> sublist =new LinkedList<Group>(article.subList(fromIndex, toIndex+1));
+//        LinkedList<Group> sublist = (LinkedList<Group>) article.subList(fromIndex, toIndex);
         Group combinedGroup = new Group();
         for (Group g: sublist) {
             if (markType == MarkType.ENTITY)
@@ -200,8 +202,8 @@ public class MarkTable implements Serializable {
     //record
     boolean save(String filename) {
         FileHelper fileHelper = new FileHelper();
-        fileHelper.save(filename, this);
-        return true;
+
+        return fileHelper.save(filename, this);
     }
     JSONObject publish() {
         if (markType == MarkType.ENTITY) {
@@ -880,15 +882,20 @@ class WordToken implements Serializable {
 }
 
 class FileHelper {
-    void save(String filename, Object object){
+    boolean save(String filename, Object object){
         try{
             File file = new File(filename);
+            if(!file.exists()){
+                if(!file.mkdirs()) return false;
+            }
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(object);
             oos.flush();
             oos.close();
+            return true;
         }catch (IOException e){
             e.printStackTrace();
+            return false;
         }
     }
     Object read(String filename){

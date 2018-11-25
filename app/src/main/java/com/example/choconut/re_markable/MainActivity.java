@@ -44,8 +44,9 @@ public class MainActivity extends AppCompatActivity {
                     new AlertDialog.Builder(MainActivity.this).setMessage(notice).setPositiveButton("yes",null).show();
                     if(notice.equals(success)){
                         Intent intent=new Intent();
-                        intent.setClass(MainActivity.this,MainInterface.class);
+                        intent.setClass(MainActivity.this,Gallery.class);
                         intent.putExtra("token",UserHelper.getToken(msg));
+                        intent.putExtra("username",username.getText().toString());
                         MainActivity.this.startActivity(intent);
                     }
 
