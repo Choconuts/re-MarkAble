@@ -1,7 +1,10 @@
 package com.example.choconut.re_markable;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -11,13 +14,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.view.Window;
 import android.widget.Toast;
-
+import adapter.Adapter;
 
 import com.example.choconut.re_markable.MarkTable;
 import com.example.choconut.re_markable.UserHelper;
@@ -43,7 +50,14 @@ public class MainInterface extends AppCompatActivity {
     private String username;
     private boolean isComplete;
     Button combine;
+    Button discard;
+    String token;
+    LinkedList<Entity> entitylist;
 
+    private RecyclerView lRecyclerView;     //列表控件
+    private RecyclerView.Adapter lAdapter;                //适配器
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
@@ -59,11 +73,21 @@ public class MainInterface extends AppCompatActivity {
         isComplete=false;
         left=-1;
         right=-1;
+        entitylist=new LinkedList<Entity>();
         Intent intent= getIntent();
-        String token= intent.getStringExtra("token");
+        token= intent.getStringExtra("token");
         username=intent.getStringExtra("username");
+        int start=intent.getIntExtra("start",0);
         fl=(FlowLayout) findViewById(R.id.CandidateList);
         fl.setPadding(10,0,10,0);
+        discard=findViewById(R.id.discard);
+        discard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fl.removeAllViews();
+                uh.getEntities(token);
+            }
+        });
         combine=findViewById(R.id.combine);
         combine.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -95,6 +119,8 @@ public class MainInterface extends AppCompatActivity {
                                 String idn=wordList.get(i);
                                 addbutton(mt.getString(idn),idn);
                             }
+                            initView();
+                            setAdapter();
                         }
 
                         break;
@@ -106,12 +132,18 @@ public class MainInterface extends AppCompatActivity {
 //        hd.hasMessages()
         uh=new UserHelper(hd);
         FileHelper fileHelper = new FileHelper();
-        String now=username;
-        now=now.concat("+entity.json");
+        String dir = this.getFilesDir().getPath()+"/"+username;
+        String now=dir+"/entity-save.json";
         Object su=fileHelper.read(now);
-        if(null!=su){
+        if(null!=su&&start==0){
             try{
                 mt=MarkTable.load(now);
+                LinkedList<String> wordList;
+                wordList=mt.getArticle();
+                for (int i=0;i<wordList.size();i++){
+                    String idn=wordList.get(i);
+                    addbutton(mt.getString(idn),idn);
+                }
             }
             catch (Exception e){
                 Toast.makeText(MainInterface.this, "存档出错", Toast.LENGTH_SHORT).show();
@@ -126,7 +158,40 @@ public class MainInterface extends AppCompatActivity {
 
 
 
+
     }
+
+
+    /**
+     * 初始化控件方法
+     */
+    private void initView(){
+        //获取列表控件
+        lRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+    }
+
+    /**
+     * 设置适配器方法
+     */
+    private void setAdapter(){
+        //设置列表布局管理
+        lRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //设置适配器
+        LinkedList<String> lk=new LinkedList<>();
+        entitylist=mt.getEntities();
+        for(int i=0;i<entitylist.size();i++){
+            lk.add(entitylist.get(i).entityName);
+        }
+
+        lRecyclerView.setAdapter(lAdapter = new Adapter(this,lk));
+        //设置列表中子项的动画
+        lRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
+    }
+
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void addbutton(String text, String groupId){
@@ -176,31 +241,93 @@ public class MainInterface extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void CombineGroup(){
-        if(left!=-1&&right!=-1){
-            if(left>right){
-                int temp=left;
-                left=right;
-                right=temp;
-            }
-            String id2= mt.combine(ButtonList.get(left).groupID,ButtonList.get(right).groupID);
+        if(left!=-1){
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainInterface.this);
+            builder.setIcon(R.drawable.icon1);
+            builder.setTitle("创建实体");
+            builder.setMessage("这是一个什么实体？");
+            builder.setPositiveButton("人名", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    if(left!=-1&&right!=-1){
+                        if(left>right){
+                            int temp=left;
+                            left=right;
+                            right=temp;
+                        }
+                        String id2= mt.combine(ButtonList.get(left).groupID,ButtonList.get(right).groupID);
 
-            for(int i=left;i<=right;i++){
-                fl.removeView(ButtonList.get(i).bt);
-            }
-            for(int i=left;i<=right;i++){
-                ButtonList.remove(left);
-            }
+                        for(int i=left;i<=right;i++){
+                            fl.removeView(ButtonList.get(i).bt);
+                        }
+                        for(int i=left;i<=right;i++){
+                            ButtonList.remove(left);
+                        }
 
-            addbutton(mt.getString(id2),id2,left);
-            left=-1;
-            right=-1;
+                        addbutton(mt.getString(id2),id2,left);
+                        mt.addEntity(ButtonList.get(left).groupID,"PERSON");
+                        left=-1;
+                        right=-1;
+                    }
+                }
+            });
+
+
+            builder.setNegativeButton("职位", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    if(left!=-1&&right!=-1){
+                        if(left>right){
+                            int temp=left;
+                            left=right;
+                            right=temp;
+                        }
+                        String id2= mt.combine(ButtonList.get(left).groupID,ButtonList.get(right).groupID);
+
+                        for(int i=left;i<=right;i++){
+                            fl.removeView(ButtonList.get(i).bt);
+                        }
+                        for(int i=left;i<=right;i++){
+                            ButtonList.remove(left);
+                        }
+
+                        addbutton(mt.getString(id2),id2,left);
+                        mt.addEntity(ButtonList.get(left).groupID,"TITLE");
+                        left=-1;
+                        right=-1;
+                    }
+                }
+            });
+
+            builder.setNeutralButton("取消", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    Toast.makeText(MainInterface.this, "neutral: " + which, Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.show();
+
+
+
         }
+
     }
 
     @Override
     protected void onDestroy() {
-        String url=this.getFilesDir().getPath()+"/"+username+"/entity-save.json";
-        boolean su=mt.save(url);
+        String dir = this.getFilesDir().getPath()+"/"+username;
+        FileHelper fp = new FileHelper();
+        if (fp.mkdir(dir)){
+            String url=dir+"/entity-save.json";
+            boolean su=mt.save(url);
+        }
+
         super.onDestroy();
     }
 

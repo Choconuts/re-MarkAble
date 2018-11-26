@@ -882,12 +882,16 @@ class WordToken implements Serializable {
 }
 
 class FileHelper {
+    boolean mkdir(String pathname) {
+        File file = new File(pathname);
+        if(!file.exists()){
+            return file.mkdirs();
+        }
+        return true;
+    }
     boolean save(String filename, Object object){
         try{
             File file = new File(filename);
-            if(!file.exists()){
-                if(!file.mkdirs()) return false;
-            }
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(object);
             oos.flush();

@@ -22,6 +22,9 @@
         </activity>
         <activity android:name=".MainInterface" />
         <activity android:name=".Gallery"></activity>
+        <activity android:name=".SetDialog"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            ></activity>
     </application>
 
 </manifest>

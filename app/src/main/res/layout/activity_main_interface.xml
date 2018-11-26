@@ -20,28 +20,39 @@
 
             <Button
                 android:id="@+id/separate"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:background="@drawable/blue"
+                android:background="@drawable/white"
                 android:text="拆开" />
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="实体标注"
-                android:layout_centerInParent="true"
+                android:textSize="24sp" />
+            <Button
+                android:id="@+id/discard"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="删档"
+                android:background="@drawable/white"
+                android:layout_alignParentRight="true"
                 />
-
             <Button
                 android:id="@+id/combine"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="结合"
-                android:background="@drawable/blue"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
+                android:background="@drawable/white"
+                android:text="设为实体"
+
                 />
         </LinearLayout>
 
@@ -67,22 +78,23 @@
                 android:layout_marginBottom="5dp"
                 android:id="@+id/CandidateList">
 
-
-
-
-
-
             </org.apmem.tools.layouts.FlowLayout>
         </ScrollView>
 
 
 
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:background="#EEEEEE"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            />
 
-
-
-
-    </LinearLayout>
+        </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

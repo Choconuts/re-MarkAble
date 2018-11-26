@@ -1,3 +1,5 @@
+package com.example.choconut.re_markable;
+
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
