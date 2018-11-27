@@ -17,6 +17,7 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -51,8 +52,10 @@ public class MainInterface extends AppCompatActivity {
     private boolean isComplete;
     Button combine;
     Button discard;
+    Button seperate;
     String token;
     LinkedList<Entity> entitylist;
+    LinkedList<String> infolist;
 
     private RecyclerView lRecyclerView;     //列表控件
     private RecyclerView.Adapter lAdapter;                //适配器
@@ -119,6 +122,9 @@ public class MainInterface extends AppCompatActivity {
                                 String idn=wordList.get(i);
                                 addbutton(mt.getString(idn),idn);
                             }
+
+
+
                             initView();
                             setAdapter();
                         }
@@ -144,6 +150,9 @@ public class MainInterface extends AppCompatActivity {
                     String idn=wordList.get(i);
                     addbutton(mt.getString(idn),idn);
                 }
+                initView();
+                setAdapter();
+
             }
             catch (Exception e){
                 Toast.makeText(MainInterface.this, "存档出错", Toast.LENGTH_SHORT).show();
@@ -154,7 +163,15 @@ public class MainInterface extends AppCompatActivity {
             uh.getEntities(token);
         }
 
+        seperate=findViewById(R.id.separate);
+        seperate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewGroup vg=findViewById(R.id.widget_1);
 
+
+            }
+        });
 
 
 
@@ -175,15 +192,18 @@ public class MainInterface extends AppCompatActivity {
      */
     private void setAdapter(){
         //设置列表布局管理
-        lRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        lRecyclerView.setLayoutManager(new LinearLayoutManager(MainInterface.this));
         //设置适配器
-        LinkedList<String> lk=new LinkedList<>();
+        infolist=new LinkedList<>();
         entitylist=mt.getEntities();
+        String now;
         for(int i=0;i<entitylist.size();i++){
-            lk.add(entitylist.get(i).entityName);
+            now=entitylist.get(i).entityName+"    ";
+            now=now+entitylist.get(i).nerTag;
+            infolist.add(now);
         }
 
-        lRecyclerView.setAdapter(lAdapter = new Adapter(this,lk));
+        lRecyclerView.setAdapter(lAdapter = new Adapter(MainInterface.this,infolist));
         //设置列表中子项的动画
         lRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -209,6 +229,7 @@ public class MainInterface extends AppCompatActivity {
         fl.addView(btn);
         ButtonData bdn=new ButtonData(groupId,btn,0,0,text);
         ButtonList.add(bdn);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -268,6 +289,20 @@ public class MainInterface extends AppCompatActivity {
 
                         addbutton(mt.getString(id2),id2,left);
                         mt.addEntity(ButtonList.get(left).groupID,"PERSON");
+                        String now=mt.getString(id2)+"    ";
+                        now=now+"PERSON";
+                        infolist.add(now);
+                        lAdapter.notifyDataSetChanged();
+                        left=-1;
+                        right=-1;
+                    }
+                    else if(left!=-1){
+                        mt.addEntity(ButtonList.get(left).groupID,"PERSON");
+                        String now=mt.getString(ButtonList.get(left).groupID)+"    ";
+                        now=now+"PERSON";
+                        infolist.add(now);
+                        lAdapter.notifyDataSetChanged();
+                        ButtonList.get(left).bt.setTouch();
                         left=-1;
                         right=-1;
                     }
@@ -297,6 +332,20 @@ public class MainInterface extends AppCompatActivity {
 
                         addbutton(mt.getString(id2),id2,left);
                         mt.addEntity(ButtonList.get(left).groupID,"TITLE");
+                        String now=mt.getString(id2)+"    ";
+                        now=now+"TITLE";
+                        infolist.add(now);
+                        lAdapter.notifyDataSetChanged();
+                        left=-1;
+                        right=-1;
+                    }
+                    else if(left!=-1){
+                        mt.addEntity(ButtonList.get(left).groupID,"TITLE");
+                        String now=mt.getString(ButtonList.get(left).groupID)+"    ";
+                        now=now+"TITLE";
+                        infolist.add(now);
+                        lAdapter.notifyDataSetChanged();
+                        ButtonList.get(left).bt.setTouch();
                         left=-1;
                         right=-1;
                     }

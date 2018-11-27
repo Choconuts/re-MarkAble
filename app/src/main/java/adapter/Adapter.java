@@ -45,7 +45,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         for (int i = 0; i < 2; i++) {
             listIcon.add(icons[i]);
         }
-        infos=new LinkedList<String>(contents);
+        infos=contents;
     }
 
     /**
@@ -90,6 +90,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
         return holder;
     }
+
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
