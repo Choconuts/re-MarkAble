@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.choconut.re_markable.MainInterface;
 import com.example.choconut.re_markable.R;
 import com.example.choconut.re_markable.Utils;
 import com.example.choconut.re_markable.SlidingButton;
@@ -119,7 +120,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     public void removeData(int position) {
         infos.remove(position);
         notifyItemRemoved(position);    //删除列表
-
+        MainInterface mi=(MainInterface)lContext;
+        mi.removeEntity(position);
     }
 
 }

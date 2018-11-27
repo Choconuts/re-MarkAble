@@ -73,6 +73,9 @@ public class SlidingButton extends HorizontalScrollView {
 
 
 
+
+
+
     /**
      * 根据滑动距离判断是否显示删除按钮
      */
@@ -82,6 +85,7 @@ public class SlidingButton extends HorizontalScrollView {
             //显示删除按钮
             this.smoothScrollTo(lScrollWidth, 0);
             isShowDelButton = true;
+
         }else{
             //隐藏删除按钮
             this.smoothScrollTo(0, 0);

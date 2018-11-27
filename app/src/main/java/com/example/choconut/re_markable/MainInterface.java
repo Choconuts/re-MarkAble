@@ -289,18 +289,28 @@ public class MainInterface extends AppCompatActivity {
 
                         addbutton(mt.getString(id2),id2,left);
                         mt.addEntity(ButtonList.get(left).groupID,"PERSON");
-                        String now=mt.getString(id2)+"    ";
-                        now=now+"PERSON";
-                        infolist.add(now);
+                        infolist.clear();
+                        String now;
+                        entitylist=mt.getEntities();
+                        for(int i=0;i<entitylist.size();i++){
+                            now=entitylist.get(i).entityName+"    ";
+                            now=now+entitylist.get(i).nerTag;
+                            infolist.add(now);
+                        }
                         lAdapter.notifyDataSetChanged();
                         left=-1;
                         right=-1;
                     }
                     else if(left!=-1){
                         mt.addEntity(ButtonList.get(left).groupID,"PERSON");
-                        String now=mt.getString(ButtonList.get(left).groupID)+"    ";
-                        now=now+"PERSON";
-                        infolist.add(now);
+                        infolist.clear();
+                        String now;
+                        entitylist=mt.getEntities();
+                        for(int i=0;i<entitylist.size();i++){
+                            now=entitylist.get(i).entityName+"    ";
+                            now=now+entitylist.get(i).nerTag;
+                            infolist.add(now);
+                        }
                         lAdapter.notifyDataSetChanged();
                         ButtonList.get(left).bt.setTouch();
                         left=-1;
@@ -332,18 +342,28 @@ public class MainInterface extends AppCompatActivity {
 
                         addbutton(mt.getString(id2),id2,left);
                         mt.addEntity(ButtonList.get(left).groupID,"TITLE");
-                        String now=mt.getString(id2)+"    ";
-                        now=now+"TITLE";
-                        infolist.add(now);
+                        infolist.clear();
+                        String now;
+                        entitylist=mt.getEntities();
+                        for(int i=0;i<entitylist.size();i++){
+                            now=entitylist.get(i).entityName+"    ";
+                            now=now+entitylist.get(i).nerTag;
+                            infolist.add(now);
+                        }
                         lAdapter.notifyDataSetChanged();
                         left=-1;
                         right=-1;
                     }
                     else if(left!=-1){
                         mt.addEntity(ButtonList.get(left).groupID,"TITLE");
-                        String now=mt.getString(ButtonList.get(left).groupID)+"    ";
-                        now=now+"TITLE";
-                        infolist.add(now);
+                        infolist.clear();
+                        String now;
+                        entitylist=mt.getEntities();
+                        for(int i=0;i<entitylist.size();i++){
+                            now=entitylist.get(i).entityName+"    ";
+                            now=now+entitylist.get(i).nerTag;
+                            infolist.add(now);
+                        }
                         lAdapter.notifyDataSetChanged();
                         ButtonList.get(left).bt.setTouch();
                         left=-1;
@@ -408,7 +428,12 @@ public class MainInterface extends AppCompatActivity {
             }
         }
     }
-
+public void removeEntity(int pos){
+        entitylist=mt.getEntities();
+        mt.deleteEntity(entitylist.get(pos).groupId);
+        entitylist=mt.getEntities();
+        entitylist=mt.getEntities();
+}
 
 }
 

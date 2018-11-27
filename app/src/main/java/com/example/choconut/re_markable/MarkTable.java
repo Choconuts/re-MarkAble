@@ -806,6 +806,7 @@ class Entity implements Serializable  {
         entityName = group.getEntityName();
         nerTag = nt;
         groupId = group.id;
+        id = "e" + Document.genId(19);
     }
     JSONObject toJson(){
         JSONObject res = new JSONObject();
