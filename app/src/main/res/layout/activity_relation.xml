@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@android:style/Theme.Translucent.NoTitleBar"
-    tools:context="com.example.choconut.re_markable.MainInterface"
-    android:layout_gravity="end|bottom"
-    >
+    tools:context="com.example.choconut.re_markable.MainInterface">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -21,14 +19,13 @@
             >
 
             <Button
-                android:id="@+id/discard"
+                android:id="@+id/separate"
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="返回"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:background="@drawable/white"
-                android:layout_alignParentRight="true"
-                />
+                android:text="拆开" />
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="0dp"
@@ -38,7 +35,15 @@
                 android:gravity="center"
                 android:text="实体标注"
                 android:textSize="24sp" />
-
+            <Button
+                android:id="@+id/discard"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="删档"
+                android:background="@drawable/white"
+                android:layout_alignParentRight="true"
+                />
             <Button
                 android:id="@+id/combine"
                 style="@style/Widget.AppCompat.Button"
@@ -89,24 +94,7 @@
             android:overScrollMode="never"
             />
 
-        </LinearLayout>
-
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageButton
-        android:id="@+id/sent"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/sent"
-        android:elevation="1dp"
-        android:tint="@android:color/white" />
-</RelativeLayout>
-
-
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

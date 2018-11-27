@@ -63,6 +63,42 @@ public class Gallery extends AppCompatActivity {
                 });
                 builder.show();
             }
+
+        });
+
+        bt2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(Gallery.this);
+                builder.setMessage("要怎么开始标注？");
+                builder.setPositiveButton("重新开始", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent=new Intent();
+                        intent.setClass(Gallery.this,Relation.class);
+                        intent.putExtra("token",token);
+                        intent.putExtra("username",username);
+                        intent.putExtra("type",1);
+                        intent.putExtra("start",1);
+                        Gallery.this.startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton("如果有存档，继续", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent=new Intent();
+                        intent.setClass(Gallery.this,Relation.class);
+                        intent.putExtra("token",token);
+                        intent.putExtra("username",username);
+                        intent.putExtra("type",1);
+                        intent.putExtra("start",0);
+                        Gallery.this.startActivity(intent);
+                    }
+                });
+                builder.show();
+
+            }
         });
 
 

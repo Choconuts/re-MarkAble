@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.view.Window;
@@ -52,7 +53,7 @@ public class MainInterface extends AppCompatActivity {
     private boolean isComplete;
     Button combine;
     Button discard;
-    Button seperate;
+    ImageButton sent;
     String token;
     LinkedList<Entity> entitylist;
     LinkedList<String> infolist;
@@ -80,6 +81,7 @@ public class MainInterface extends AppCompatActivity {
         Intent intent= getIntent();
         token= intent.getStringExtra("token");
         username=intent.getStringExtra("username");
+        infolist=new LinkedList<>();
         int start=intent.getIntExtra("start",0);
         fl=(FlowLayout) findViewById(R.id.CandidateList);
         fl.setPadding(10,0,10,0);
@@ -91,6 +93,8 @@ public class MainInterface extends AppCompatActivity {
                 finish();
             }
         });
+
+
         combine=findViewById(R.id.combine);
         combine.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -125,6 +129,22 @@ public class MainInterface extends AppCompatActivity {
                         }
 
                         break;
+                    case 5:
+                        String result=UserHelper.getMsg(msg);
+                        String success="上传成功";
+                        if(result.equals(success)){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainInterface.this);
+                            builder.setIcon(R.drawable.icon1);
+                            builder.setMessage("上传成功！");
+                            builder.setPositiveButton("返回选择界面", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MainInterface.this.finish();
+                                }
+                            });
+                            builder.show();
+                        }
+
                 }
 
                 super.handleMessage(msg);
@@ -152,14 +172,19 @@ public class MainInterface extends AppCompatActivity {
         else{
             uh.getEntities(token);
         }
-
-        seperate=findViewById(R.id.separate);
-        seperate.setOnClickListener(new View.OnClickListener() {
+        sent=findViewById(R.id.sent);
+        RelativeLayout.LayoutParams layout=(RelativeLayout.LayoutParams)sent.getLayoutParams();
+        int width=Utils.getScreenWidth(this);
+        int height=Utils.getScreenHeight(this);
+        layout.setMargins(width,height,10,10);
+        sent.setLayoutParams(layout);
+        sent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                uh.uploadEntities(token,mt.publish().toString());
             }
         });
+
 
 
 
@@ -182,7 +207,6 @@ public class MainInterface extends AppCompatActivity {
         //设置列表布局管理
         lRecyclerView.setLayoutManager(new LinearLayoutManager(MainInterface.this));
         //设置适配器
-        infolist=new LinkedList<>();
         updateList();
         lRecyclerView.setAdapter(lAdapter = new Adapter(MainInterface.this,infolist));
         //设置列表中子项的动画
@@ -422,6 +446,7 @@ public void hightlightentity(int pos){
 }
 
 public void updateList(){
+    if(infolist.size()!=0)infolist.clear();
     entitylist=mt.getEntities();
     String now;
     for(int i=0;i<entitylist.size();i++){
