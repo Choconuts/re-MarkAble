@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+                else if (msg.what==0) {
+                    String notice=UserHelper.getMsg(msg);
+                    new AlertDialog.Builder(MainActivity.this).setMessage(notice).setPositiveButton("yes",null).show();
+                }
                 else{
                     new AlertDialog.Builder(MainActivity.this).setMessage("登录超时，请检查网络状态").setPositiveButton("yes",null).show();
 
