@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 popupWindow.dismiss();
                 if(msg.what==1)
                 {
-                    new AlertDialog.Builder(MainActivity.this).setMessage(msg.obj.toString()).setPositiveButton("yes",null).show();
                     String notice=UserHelper.getMsg(msg);
                     String success="登录成功";
                     new AlertDialog.Builder(MainActivity.this).setMessage(notice).setPositiveButton("yes",null).show();

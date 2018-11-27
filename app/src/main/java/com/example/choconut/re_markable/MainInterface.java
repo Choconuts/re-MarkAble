@@ -17,12 +17,14 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.view.Window;
 import android.widget.Toast;
@@ -33,6 +35,7 @@ import com.example.choconut.re_markable.UserHelper;
 //import com.example.choconut.re_markable.qcloud.Utilities.Json.JSONObject;
 import org.json.JSONObject;
 
+import android.widget.PopupWindow;
 
 import org.apmem.tools.layouts.FlowLayout;
 
@@ -57,6 +60,7 @@ public class MainInterface extends AppCompatActivity {
     String token;
     LinkedList<Entity> entitylist;
     LinkedList<String> infolist;
+    PopupWindow popupWindow;
 
     private RecyclerView lRecyclerView;     //列表控件
     private RecyclerView.Adapter lAdapter;                //适配器
@@ -109,7 +113,6 @@ public class MainInterface extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void handleMessage(Message msg) {
-                new AlertDialog.Builder(MainInterface.this).setMessage(msg.toString()).setPositiveButton("yes",null).show();
                 switch (msg.what){
                     case 3:
                         if(!isCalled){
@@ -460,6 +463,7 @@ public void updateList(){
         ButtonList.get(getNumByID(entitylist.get(i).groupId)).bt.setSelected(true);
     }
 }
+
 
 
 

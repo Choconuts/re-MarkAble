@@ -19,13 +19,13 @@
             >
 
             <Button
-                android:id="@+id/separate"
+                android:id="@+id/discard"
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:background="@drawable/white"
-                android:text="拆开" />
+                android:text="返回" />
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="0dp"
@@ -33,17 +33,9 @@
                 android:layout_centerInParent="true"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="实体标注"
+                android:text="关系标注"
                 android:textSize="24sp" />
-            <Button
-                android:id="@+id/discard"
-                style="@style/Widget.AppCompat.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="删档"
-                android:background="@drawable/white"
-                android:layout_alignParentRight="true"
-                />
+
             <Button
                 android:id="@+id/combine"
                 style="@style/Widget.AppCompat.Button"
@@ -51,7 +43,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/white"
-                android:text="设为实体"
+                android:text="合并"
 
                 />
         </LinearLayout>
@@ -59,7 +51,7 @@
         <ScrollView
             android:id="@+id/widget_1"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="260dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="14dp"
             android:scrollbarStyle="insideInset"
@@ -81,7 +73,33 @@
             </org.apmem.tools.layouts.FlowLayout>
         </ScrollView>
 
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#EEEEEE"
+            >
 
+            <Button
+                android:id="@+id/changeTab"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/white"
+                android:text="查看候选项" />
+
+
+            <Button
+                android:id="@+id/setRelation"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/white"
+                android:text="设置关系"
+
+                />
+        </LinearLayout>
 
 
         <android.support.v7.widget.RecyclerView
@@ -95,6 +113,19 @@
             />
 
     </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <ImageButton
+            android:id="@+id/sent"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/sent"
+            android:elevation="1dp"
+            android:tint="@android:color/white" />
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
