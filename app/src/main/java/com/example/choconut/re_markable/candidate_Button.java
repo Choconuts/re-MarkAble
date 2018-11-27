@@ -3,6 +3,8 @@ package com.example.choconut.re_markable;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -46,6 +48,7 @@ public class candidate_Button extends android.support.v7.widget.AppCompatButton 
         setFocusable(true);
         setClickable(true);
         setOnTouchListener(new OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 float x = event.getX();
@@ -55,29 +58,42 @@ public class candidate_Button extends android.support.v7.widget.AppCompatButton 
                         setPressed(true);
                         break;
                     case MotionEvent.ACTION_UP:
-                        boolean flag=false;
-                        if(isPressed()){
-                            if(mi.left==-1){
-                                setTouch();
-                                mi.setLeft(mi.getNumByID(groupId));
-                                flag=true;
+                        if(mi.isInMark){
+                            if(mi.lEntiy==-1){
+                                mi.lEntiy=mi.getNumByID(groupId);
+                                setSelected(true);
                             }
-                            else
-                            if(mi.right==-1){
-                                mi.setRight(mi.getNumByID(groupId));
+                            else if(mi.rEntiy==-1){
+                                mi.rEntiy=mi.getNumByID(groupId);
+                                setEnabled(false);
+                                mi.addTriple();
+                            }
+                        }
+                        else{
+                            boolean flag=false;
+                            if(isPressed()){
+                                if(mi.left==-1){
+                                    setTouch();
+                                    mi.setLeft(mi.getNumByID(groupId));
+                                    flag=true;
+                                }
+                                else
+                                if(mi.right==-1){
+                                    mi.setRight(mi.getNumByID(groupId));
 
-                                mi.connectlr();
-                            }
-                            else{
-                                mi.connectlr();
-                                mi.setRight(mi.getNumByID(groupId));
-                                mi.connectlr();
-                            }
+                                    mi.connectlr();
+                                }
+                                else{
+                                    mi.connectlr();
+                                    mi.setRight(mi.getNumByID(groupId));
+                                    mi.connectlr();
+                                }
 
-                            if(mi.left==mi.getNumByID(groupId)&&!flag){
-                                setTouch();
-                                mi.setLeft(-1);
-                                mi.setRight(-1);
+                                if(mi.left==mi.getNumByID(groupId)&&!flag){
+                                    setTouch();
+                                    mi.setLeft(-1);
+                                    mi.setRight(-1);
+                                }
                             }
                         }
                         break;

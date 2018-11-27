@@ -1,6 +1,8 @@
 package adapter;
 import android.content.Context;
 import android.content.Entity;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.choconut.re_markable.MainInterface;
 import com.example.choconut.re_markable.R;
+import com.example.choconut.re_markable.Relation;
 import com.example.choconut.re_markable.Utils;
 import com.example.choconut.re_markable.SlidingButton;
 import java.util.ArrayList;
@@ -38,9 +41,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     //MyViewHolder集合
     private List<MyViewHolder> sbViews = new ArrayList<MyViewHolder>();
 
+    private int type;
 
-    public Adapter(Context context, LinkedList<String> contents) {
-
+    public Adapter(Context context, LinkedList<String> contents,int type) {
+        this.type=type;
         lContext = context;
         //设置菜单行数与行内图标、名称、信息
         for (int i = 0; i < 2; i++) {
@@ -65,7 +69,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         sbViews.add(holder);
         Log.d(TAG,"onBindViewHolder====================");
         //设置图标
-        holder.img.setBackgroundResource(listIcon.get(0));
+        if(type==0){
+            holder.img.setBackgroundResource(listIcon.get(0));
+        }
+        else {
+            holder.img.setBackgroundResource(listIcon.get(1));
+        }
+
 
         //设置信息
         holder.info.setText(infos.get(position));
@@ -74,6 +84,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
         //删除按钮的事件，单击后删除整行
         holder.btn_Delete.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 int n = holder.getLayoutPosition();     //获取要删除行的位置
@@ -103,7 +114,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     public MyViewHolder onCreateViewHolder(ViewGroup arg0, int arg1) {
         Log.d(TAG,"onCreateViewHolder====================");
         //获取列表中，每行的布局文件
-        View view = LayoutInflater.from(lContext).inflate(R.layout.layout_item, arg0, false);
+        View view=LayoutInflater.from(lContext).inflate(R.layout.layout_item, arg0, false);
+        if(type==0){
+        }
+        else {
+            view = LayoutInflater.from(lContext).inflate(R.layout.layout_item2, arg0, false);
+        }
+
         MyViewHolder holder = new MyViewHolder(view);           //
 
         return holder;
@@ -133,11 +150,19 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     /**
      * 删除列表中子项
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void removeData(int position) {
         infos.remove(position);
         notifyItemRemoved(position);    //删除列表
-        MainInterface mi=(MainInterface)lContext;
-        mi.removeEntity(position);
+        if(type==0){
+            MainInterface mi=(MainInterface)lContext;
+            mi.removeEntity(position);
+        }
+        else{
+            Relation mi=(Relation) lContext;
+            mi.removeTriple(position);
+        }
+
     }
     public void heilightthis(int position){
         MainInterface mi=(MainInterface)lContext;

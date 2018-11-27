@@ -10,6 +10,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
+
         <!--删除按钮-->
         <TextView
             android:id="@+id/tv_delete"
@@ -18,7 +21,7 @@
             android:layout_toRightOf="@+id/layout_content"
             android:background="@drawable/red_bg"
             android:gravity="center"
-            android:text="删 除"
+            android:text="删 除2"
             android:textColor="#DDFFFF" />
 
         <RelativeLayout
