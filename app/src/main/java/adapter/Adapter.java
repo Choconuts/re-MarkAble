@@ -79,6 +79,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
                 removeData(n);                          //删除列表中的子项
             }
         });
+        holder.sbView.smoothScrollTo(0,0);
     }
 
     @Override
@@ -116,8 +117,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
      * 删除列表中子项
      */
     public void removeData(int position) {
-        listIcon.remove(position);   //删除子项中显示图标
-
+        infos.remove(position);
         notifyItemRemoved(position);    //删除列表
 
     }
