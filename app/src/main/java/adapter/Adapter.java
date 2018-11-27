@@ -80,6 +80,22 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
                 removeData(n);                          //删除列表中的子项
             }
         });
+
+        holder.info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int n = holder.getLayoutPosition();     //获取要高亮行的位置
+                heilightthis(n);                          //删除列表中的子项
+            }
+        });
+        holder.img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int n = holder.getLayoutPosition();     //获取要高亮行的位置
+                heilightthis(n);                          //删除列表中的子项
+            }
+        });
+
         holder.sbView.smoothScrollTo(0,0);
     }
 
@@ -122,6 +138,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         notifyItemRemoved(position);    //删除列表
         MainInterface mi=(MainInterface)lContext;
         mi.removeEntity(position);
+    }
+    public void heilightthis(int position){
+        MainInterface mi=(MainInterface)lContext;
+        mi.hightlightentity(position);
     }
 
 }

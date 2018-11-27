@@ -87,8 +87,8 @@ public class MainInterface extends AppCompatActivity {
         discard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fl.removeAllViews();
-                uh.getEntities(token);
+
+                finish();
             }
         });
         combine=findViewById(R.id.combine);
@@ -116,12 +116,7 @@ public class MainInterface extends AppCompatActivity {
                         else{
                             tx=UserHelper.getJson(msg);
                             mt=new MarkTable(MarkTable.MarkType.ENTITY,jo,tx);
-                            LinkedList<String> wordList;
-                            wordList=mt.getArticle();
-                            for (int i=0;i<wordList.size();i++){
-                                String idn=wordList.get(i);
-                                addbutton(mt.getString(idn),idn);
-                            }
+                            freshfl();
 
 
 
@@ -144,12 +139,7 @@ public class MainInterface extends AppCompatActivity {
         if(null!=su&&start==0){
             try{
                 mt=MarkTable.load(now);
-                LinkedList<String> wordList;
-                wordList=mt.getArticle();
-                for (int i=0;i<wordList.size();i++){
-                    String idn=wordList.get(i);
-                    addbutton(mt.getString(idn),idn);
-                }
+                freshfl();
                 initView();
                 setAdapter();
 
@@ -167,8 +157,6 @@ public class MainInterface extends AppCompatActivity {
         seperate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewGroup vg=findViewById(R.id.widget_1);
-
 
             }
         });
@@ -195,14 +183,7 @@ public class MainInterface extends AppCompatActivity {
         lRecyclerView.setLayoutManager(new LinearLayoutManager(MainInterface.this));
         //设置适配器
         infolist=new LinkedList<>();
-        entitylist=mt.getEntities();
-        String now;
-        for(int i=0;i<entitylist.size();i++){
-            now=entitylist.get(i).entityName+"    ";
-            now=now+entitylist.get(i).nerTag;
-            infolist.add(now);
-        }
-
+        updateList();
         lRecyclerView.setAdapter(lAdapter = new Adapter(MainInterface.this,infolist));
         //设置列表中子项的动画
         lRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -290,13 +271,7 @@ public class MainInterface extends AppCompatActivity {
                         addbutton(mt.getString(id2),id2,left);
                         mt.addEntity(ButtonList.get(left).groupID,"PERSON");
                         infolist.clear();
-                        String now;
-                        entitylist=mt.getEntities();
-                        for(int i=0;i<entitylist.size();i++){
-                            now=entitylist.get(i).entityName+"    ";
-                            now=now+entitylist.get(i).nerTag;
-                            infolist.add(now);
-                        }
+                        updateList();
                         lAdapter.notifyDataSetChanged();
                         left=-1;
                         right=-1;
@@ -304,13 +279,7 @@ public class MainInterface extends AppCompatActivity {
                     else if(left!=-1){
                         mt.addEntity(ButtonList.get(left).groupID,"PERSON");
                         infolist.clear();
-                        String now;
-                        entitylist=mt.getEntities();
-                        for(int i=0;i<entitylist.size();i++){
-                            now=entitylist.get(i).entityName+"    ";
-                            now=now+entitylist.get(i).nerTag;
-                            infolist.add(now);
-                        }
+                        updateList();
                         lAdapter.notifyDataSetChanged();
                         ButtonList.get(left).bt.setTouch();
                         left=-1;
@@ -343,13 +312,7 @@ public class MainInterface extends AppCompatActivity {
                         addbutton(mt.getString(id2),id2,left);
                         mt.addEntity(ButtonList.get(left).groupID,"TITLE");
                         infolist.clear();
-                        String now;
-                        entitylist=mt.getEntities();
-                        for(int i=0;i<entitylist.size();i++){
-                            now=entitylist.get(i).entityName+"    ";
-                            now=now+entitylist.get(i).nerTag;
-                            infolist.add(now);
-                        }
+                        updateList();
                         lAdapter.notifyDataSetChanged();
                         left=-1;
                         right=-1;
@@ -357,13 +320,7 @@ public class MainInterface extends AppCompatActivity {
                     else if(left!=-1){
                         mt.addEntity(ButtonList.get(left).groupID,"TITLE");
                         infolist.clear();
-                        String now;
-                        entitylist=mt.getEntities();
-                        for(int i=0;i<entitylist.size();i++){
-                            now=entitylist.get(i).entityName+"    ";
-                            now=now+entitylist.get(i).nerTag;
-                            infolist.add(now);
-                        }
+                        updateList();
                         lAdapter.notifyDataSetChanged();
                         ButtonList.get(left).bt.setTouch();
                         left=-1;
@@ -407,6 +364,24 @@ public class MainInterface extends AppCompatActivity {
         this.right = right;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void freshfl(){
+        fl.removeAllViews();
+        ButtonList.clear();
+        LinkedList<String> wordList;
+        wordList=mt.getArticle();
+        for (int i=0;i<wordList.size();i++){
+            String idn=wordList.get(i);
+            addbutton(mt.getString(idn),idn);
+        }
+        left=-1;
+        right=-1;
+        if(infolist!=null&&infolist.size()!=0){
+            infolist.clear();
+        }
+        updateList();
+    }
+
     public void connectlr(){
         boolean flag=false;
         if(left!=-1&&right!=-1) {
@@ -428,12 +403,40 @@ public class MainInterface extends AppCompatActivity {
             }
         }
     }
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public void removeEntity(int pos){
         entitylist=mt.getEntities();
         mt.deleteEntity(entitylist.get(pos).groupId);
-        entitylist=mt.getEntities();
-        entitylist=mt.getEntities();
+        mt.decompose(mt.getArticleGoups().get(getNumByID(entitylist.get(pos).groupId)));
+        freshfl();
 }
+public void hightlightentity(int pos){
+    entitylist=mt.getEntities();
+    String gid=entitylist.get(pos).groupId;
+    connectlr();
+    if(left!=-1)ButtonList.get(left).bt.setTouch();
+    left=getNumByID(gid);
+    right=-1;
+    ButtonList.get(left).bt.setTouch();
+
+}
+
+public void updateList(){
+    entitylist=mt.getEntities();
+    String now;
+    for(int i=0;i<entitylist.size();i++){
+        now=entitylist.get(i).entityName+"    ";
+        if(entitylist.get(i).nerTag=="TITLE")
+        now=now+"职位";
+        else{
+            now=now+"人物";
+        }
+        infolist.add(now);
+        ButtonList.get(getNumByID(entitylist.get(i).groupId)).bt.setSelected(true);
+    }
+}
+
+
 
 }
 

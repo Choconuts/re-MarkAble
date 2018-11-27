@@ -689,7 +689,7 @@ class DocumentEntity extends Document {
                 break;
             }
         }
-        if (index > 0) {
+        if (index >= 0) {
             entities.remove(index);
         }
     }
