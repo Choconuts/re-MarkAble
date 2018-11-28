@@ -39,7 +39,7 @@ public class MarkTable implements Serializable {
         }
         int fromIndex = article.indexOf(groupStart);
         int toIndex = article.indexOf(groupEnd);
-        LinkedList<Group> sublist = new LinkedList<Group> (article.subList(fromIndex, toIndex));
+        LinkedList<Group> sublist = new LinkedList<Group> (article.subList(fromIndex, toIndex + 1));
         Group combinedGroup = new Group();
         for (Group g: sublist) {
             if (markType == MarkType.ENTITY)
@@ -244,7 +244,7 @@ public class MarkTable implements Serializable {
         }
         int fromIndex = article.indexOf(groupStart);
         int toIndex = article.indexOf(groupEnd);
-        LinkedList<Group> sublist = new LinkedList<Group> (article.subList(fromIndex, toIndex));
+        LinkedList<Group> sublist = new LinkedList<Group> (article.subList(fromIndex, toIndex + 1));
         LinkedList<Entity> list = new LinkedList<>();
         for (Group g: sublist) {
             list.addAll(getEntitiesByGroup(g));
@@ -258,7 +258,7 @@ public class MarkTable implements Serializable {
         }
         int fromIndex = article.indexOf(groupStart);
         int toIndex = article.indexOf(groupEnd);
-        LinkedList<Group> sublist = new LinkedList<Group> (article.subList(fromIndex, toIndex));
+        LinkedList<Group> sublist = new LinkedList<Group> (article.subList(fromIndex, toIndex + 1));
         LinkedList<Triple> list = new LinkedList<>();
         for (Group g: sublist) {
             list.addAll(getTriplesByGroup(g, SearchMode.ALL));
@@ -408,7 +408,7 @@ public class MarkTable implements Serializable {
         }
         int fromIndex = article.indexOf(groupStart);
         int toIndex = article.indexOf(groupEnd);
-        LinkedList<Group> sublist = new LinkedList<Group> (article.subList(fromIndex, toIndex));
+        LinkedList<Group> sublist = new LinkedList<Group> (article.subList(fromIndex, toIndex + 1));
         LinkedList<Entity> list = new LinkedList<>();
         for (Group g: sublist) {
             list.addAll(getEntitiesByGroup(g));
@@ -424,7 +424,7 @@ public class MarkTable implements Serializable {
         }
         int fromIndex = article.indexOf(groupStart);
         int toIndex = article.indexOf(groupEnd);
-        LinkedList<Group> sublist = new LinkedList<Group> (article.subList(fromIndex, toIndex));
+        LinkedList<Group> sublist = new LinkedList<Group> (article.subList(fromIndex, toIndex + 1));
         LinkedList<Triple> list = new LinkedList<>();
         for (Group g: sublist) {
             list.addAll(getTriplesByGroup(g, SearchMode.ALL));
@@ -862,6 +862,13 @@ class WordToken implements Serializable {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }
+        int offset = 0;
+        for (WordToken w :
+                res) {
+            w.start = offset;
+            offset += w.word.length();
+            w.end = offset;
         }
         return res;
     }
