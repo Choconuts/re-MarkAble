@@ -165,8 +165,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
     }
     public void heilightthis(int position){
-        MainInterface mi=(MainInterface)lContext;
-        mi.hightlightentity(position);
+
+        if(type==0){
+            MainInterface mi=(MainInterface)lContext;
+            mi.hightlightentity(position);
+        }
+        else{
+            Relation mi=(Relation) lContext;
+            mi.hightlightTriple(position);
+        }
+
+
     }
 
 }
