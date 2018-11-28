@@ -607,6 +607,7 @@ abstract class Document implements Serializable  {
 
 class DocumentRelation extends Document {
     ArrayList<Triple> triples = new ArrayList<>();
+    ArrayList<Triple> error_triples = new ArrayList<>();
 
     void insert(Triple triple) {
         int index = -1;
@@ -624,13 +625,16 @@ class DocumentRelation extends Document {
     }
     void erase(String id) {
         int index = -1;
+        boolean flag = false;
         for (Triple next: triples) {
             if (id.equals(next.id)) {
+                if (!next.checked) flag = true;
                 index = triples.indexOf(next);
                 break;
             }
         }
         if (index >= 0) {
+            if (flag) error_triples.add(triples.get(index));
             triples.remove(index);
         }
     }
@@ -642,7 +646,10 @@ class DocumentRelation extends Document {
             res.put("sent_ctx", content);
             JSONArray tris = new JSONArray();
             for (int i = 0; i < triples.size(); i++){
-                tris.put(triples.get(i).toJson());
+                tris.put(triples.get(i).toJson(1));
+            }
+            for (int i = 0; i < error_triples.size(); i++){
+                tris.put(error_triples.get(i).toJson(-1));
             }
             res.put("triples", tris);
             return res;
@@ -777,7 +784,7 @@ class Triple implements Serializable  {
         rightGroupId = groupRight.id;
         checked = true;
     }
-    JSONObject toJson(){
+    JSONObject toJson(int i){
         JSONObject res = new JSONObject();
         try {
             res.put("id", id);
@@ -790,7 +797,7 @@ class Triple implements Serializable  {
             res.put("relation_id", relation_id);
             res.put("left_entity", left_entity);
             res.put("right_entity", right_entity);
-            res.put("status", 1);
+            res.put("status", i);
             return res;
         }catch (Exception e){
             e.printStackTrace();
