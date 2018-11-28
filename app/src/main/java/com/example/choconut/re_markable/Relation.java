@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 import adapter.Adapter;
 
@@ -54,8 +55,8 @@ public class Relation extends AppCompatActivity {
     public int right;
     private String username;
     private boolean isComplete;
-    Button combine;
-    Button discard;
+    TextView combine;
+    TextView discard;
     ImageButton sent;
     String token;
     LinkedList<Triple> triplelist;
@@ -63,7 +64,7 @@ public class Relation extends AppCompatActivity {
     LinkedList<String> infolist_candi=new LinkedList<>();
     LinkedList<String> infolist;
     PopupWindow popupWindow;
-    private Button setRelation;
+    private TextView setRelation;
     public boolean isInMark=false;
     public int lEntiy=-1;
     public int rEntiy=-1;
@@ -187,7 +188,8 @@ public class Relation extends AppCompatActivity {
         sent.setOnClickListener(new View.OnClickListener() {//上传函数在这里
             @Override
             public void onClick(View v) {
-                uh.uploadEntities(token,mt.publish().toString());
+                new AlertDialog.Builder(Relation.this).setMessage(mt.publish().toString()).setPositiveButton("yes",null).show();
+                uh.uploadTriples(token,mt.publish().toString());
             }
         });
 
@@ -197,7 +199,10 @@ public class Relation extends AppCompatActivity {
         setRelation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isInMark=true;
+                if(isInMark)isInMark=false;
+                else {
+                    isInMark=true;
+                }
             }
         });
 

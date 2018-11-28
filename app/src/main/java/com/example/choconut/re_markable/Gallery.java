@@ -2,6 +2,8 @@ package com.example.choconut.re_markable;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -105,9 +107,22 @@ public class Gallery extends AppCompatActivity {
         bt3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1=new Intent();
-                intent1.setClass(Gallery.this,SetDialog.class);
-                startActivity(intent1);
+                Handler h=new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        String str=UserHelper.getMsg(msg);
+                        new AlertDialog.Builder(Gallery.this).setMessage(str).setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Gallery.this.finish();
+                            }
+                        }).show();
+                        super.handleMessage(msg);
+
+                    }
+                };
+                UserHelper userHelper=new UserHelper(h);
+                userHelper.signOut(token);
             }
         });
 
