@@ -30,7 +30,7 @@ public class UserHelper {
     private static String entityUrl = "http://10.15.82.223:9090/app_get_data/app_get_entity";
     private static String tripleUrl = "http://10.15.82.223:9090/app_get_data/app_get_triple";
     private static String entityUploadUrl = "http://10.15.82.223:9090/app_get_data/app_upload_entity";
-    private static String tripleUploadUrl = "http://10.15.82.223:9090/app_get_data/app_upload_entity";
+    private static String tripleUploadUrl = "http://10.15.82.223:9090/app_get_data/app_upload_triple";
 
     UserHelper(Handler h){
         handler = h;

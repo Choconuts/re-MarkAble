@@ -639,8 +639,6 @@ class DocumentRelation extends Document {
     JSONObject toJson() {
         JSONObject res = super.toJson();
         try {
-            String s = res.getString("sent_id");
-            res.put("sent_id", Integer.parseInt(s));
             res.put("sent_ctx", content);
             JSONArray tris = new JSONArray();
             for (int i = 0; i < triples.size(); i++){
@@ -792,6 +790,7 @@ class Triple implements Serializable  {
             res.put("relation_id", relation_id);
             res.put("left_entity", left_entity);
             res.put("right_entity", right_entity);
+            res.put("status", 1);
             return res;
         }catch (Exception e){
             e.printStackTrace();
