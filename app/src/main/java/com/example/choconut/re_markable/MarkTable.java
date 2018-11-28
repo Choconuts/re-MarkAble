@@ -639,6 +639,8 @@ class DocumentRelation extends Document {
     JSONObject toJson() {
         JSONObject res = super.toJson();
         try {
+            String s = res.getString("sent_id");
+            res.put("sent_id", Integer.parseInt(s));
             res.put("sent_ctx", content);
             JSONArray tris = new JSONArray();
             for (int i = 0; i < triples.size(); i++){
@@ -653,6 +655,7 @@ class DocumentRelation extends Document {
     }
     DocumentRelation(JSONObject obj) {
         super(obj);
+
         try {
             JSONArray array = obj.getJSONArray("triples");
             for (int i = 0; i < array.length(); i++) {
