@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.example.activitylife.MainActivity"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical">
         <Button
             android:id="@+id/entity"
@@ -23,11 +23,14 @@
 
         <Button
             android:id="@+id/relation"
+            android:layout_marginTop="50dp"
             android:background="@drawable/relation"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:text="关系标注"/>
+
         <Button
+            android:layout_marginTop="200dp"
             android:id="@+id/loginOut"
             android:background="@drawable/blue"
             android:layout_width="match_parent"

@@ -53,9 +53,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         infos=contents;
     }
 
-    /**
-     * 返回数据集中的项目总数
-     */
+
     @Override
     public int getItemCount() {
         return infos.size();
@@ -129,11 +127,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        public SlidingButton sbView;             //SlidingButtonView 自定义控件
-        public TextView btn_Delete;             //删除按钮
-        public TextView info;               //编号文字
-        public ImageView img;                   //图标
-        public ViewGroup layout_content;       //图标与编号的布局
+        public SlidingButton sbView;
+        public TextView btn_Delete;
+        public TextView info;
+        public ImageView img;
+        public ViewGroup layout_content;
 
         //获取相关控件
         public MyViewHolder(View itemView) {
@@ -147,9 +145,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         }
     }
 
-    /**
-     * 删除列表中子项
-     */
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void removeData(int position) {
         infos.remove(position);
