@@ -59,9 +59,14 @@ public class Relation extends AppCompatActivity {
     ImageButton sent;
     String token;
     LinkedList<Triple> triplelist;
-    LinkedList<Triple> triplelist_candi;
+    LinkedList<Triple> triplelist_candi=new LinkedList<>();
+    LinkedList<String> infolist_candi=new LinkedList<>();
     LinkedList<String> infolist;
     PopupWindow popupWindow;
+    private Button setRelation;
+    public boolean isInMark=false;
+    public int lEntiy=-1;
+    public int rEntiy=-1;
 
     private RecyclerView lRecyclerView;     //列表控件
     private RecyclerView.Adapter lAdapter;                //适配器
@@ -125,8 +130,7 @@ public class Relation extends AppCompatActivity {
                         mt=new MarkTable(MarkTable.MarkType.RELATION,jo,tx);
                         freshfl();
 
-                        initView();
-                        setAdapter();
+
                         break;
                     case 5:
                         String result=UserHelper.getMsg(msg);
@@ -155,14 +159,13 @@ public class Relation extends AppCompatActivity {
         String dir = this.getFilesDir().getPath()+"/"+username;
         String now=dir+"/relation-save.json";
         Object su=fileHelper.read(now);
-
+        initView();
+        setAdapter();
         if(null!=su&&start==0){
             //如果有存档
             try{
                 mt=MarkTable.load(now);                         //读存档
                 freshfl();
-                initView();
-                setAdapter();
 
             }
             catch (Exception e){
@@ -190,6 +193,14 @@ public class Relation extends AppCompatActivity {
 
 
 
+        setRelation=findViewById(R.id.setRelation);
+        setRelation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isInMark=true;
+            }
+        });
+
 
 
     }
@@ -210,8 +221,7 @@ public class Relation extends AppCompatActivity {
         //设置列表布局管理
         lRecyclerView.setLayoutManager(new LinearLayoutManager(Relation.this));
         //设置适配器
-        updateList();
-        lRecyclerView.setAdapter(lAdapter = new Adapter(Relation.this,infolist));
+        lRecyclerView.setAdapter(lAdapter = new Adapter(Relation.this,infolist,1));
         //设置列表中子项的动画
         lRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -377,6 +387,7 @@ public class Relation extends AppCompatActivity {
 
     public void updateList(){
         if(infolist.size()!=0)infolist.clear();
+        if(infolist_candi.size()!=0)infolist_candi.clear();
         triplelist=mt.getTriples();
         String now;
         for(int i=0;i<triplelist.size();i++){
@@ -387,14 +398,66 @@ public class Relation extends AppCompatActivity {
             else{
                 now=now+"亲属";
             }
-            now=triplelist.get(i).right_entity;
-            infolist.add(now);
+            now=now+triplelist.get(i).right_entity;
+//            if(triplelist.get(i).checked){
+                infolist.add(now);
+//            }
+//            else {
+//                infolist_candi.add(now);
+//            }
             ButtonList.get(getNumByID(triplelist.get(i).leftGroupId)).bt.setSelected(true);
             ButtonList.get(getNumByID(triplelist.get(i).rightGroupId)).bt.setEnabled(false);
         }
+        lAdapter.notifyDataSetChanged();
     }
 
+    public void setlEntiy(int lEntiy) {
+        this.lEntiy = lEntiy;
+    }
 
+    public void setrEntiy(int rEntiy) {
+        this.rEntiy = rEntiy;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+public void addTriple(){
+        if(lEntiy!=-1&&rEntiy!=-1){
+            AlertDialog.Builder builder = new AlertDialog.Builder(Relation.this);
+            builder.setMessage("要怎么开始标注？");
+            builder.setPositiveButton("任职", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(lEntiy!=-1&&rEntiy!=-1){
+                        String id1=ButtonList.get(lEntiy).groupID;
+                        String id2=ButtonList.get(rEntiy).groupID;
+                        mt.addTriple(id1,id2,null,0);
+                        freshfl();
+                        lEntiy=-1;
+                        rEntiy=-1;
+                    }
+
+                }
+            });
+            builder.setNegativeButton("亲属", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(lEntiy!=-1&&rEntiy!=-1) {
+                        String id1 = ButtonList.get(lEntiy).groupID;
+                        String id2 = ButtonList.get(rEntiy).groupID;
+                        mt.addTriple(id1, id2, null, 1);
+                        freshfl();
+                        lEntiy=-1;
+                        rEntiy=-1;
+                    }
+                }
+            });
+            builder.show();
+
+            isInMark=false;
+
+        }
+
+}
 
 
 }

@@ -124,9 +124,6 @@ public class MainInterface extends AppCompatActivity {
                             tx=UserHelper.getJson(msg);
                             mt=new MarkTable(MarkTable.MarkType.ENTITY,jo,tx);
                             freshfl();
-
-
-
                             initView();
                             setAdapter();
                         }
@@ -211,7 +208,7 @@ public class MainInterface extends AppCompatActivity {
         lRecyclerView.setLayoutManager(new LinearLayoutManager(MainInterface.this));
         //设置适配器
         updateList();
-        lRecyclerView.setAdapter(lAdapter = new Adapter(MainInterface.this,infolist));
+        lRecyclerView.setAdapter(lAdapter = new Adapter(MainInterface.this,infolist,0));
         //设置列表中子项的动画
         lRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
