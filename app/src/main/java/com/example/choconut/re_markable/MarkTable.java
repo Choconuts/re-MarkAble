@@ -471,6 +471,8 @@ public class MarkTable implements Serializable {
         else
             groupRelation = findById(groupRelationId);
 
+        if(groupLeftId.equals(groupRightId) || groupLeftId.equals(groupRelationId) || groupRightId.equals(groupRelationId)) return false;
+
         if(groupLeft == null || groupRight == null) return false;
         Triple triple = new Triple(groupLeft, groupRight, groupRelation, relationId);
 
@@ -492,7 +494,8 @@ public class MarkTable implements Serializable {
         for (String idLeft: groupLeft.occupate){
             for (String idRight: groupRight.occupate){
                 if (idLeft.equals(idRight)) {
-                    for (Group group: article) {
+                    LinkedList<Group> tempList = new LinkedList<>(article);
+                    for (Group group: tempList) {
                         group.removeRelation(idLeft);
                     }
                     tripleDoc.erase(idLeft);
@@ -627,7 +630,7 @@ class DocumentRelation extends Document {
                 break;
             }
         }
-        if (index > 0) {
+        if (index >= 0) {
             triples.remove(index);
         }
     }
@@ -756,6 +759,7 @@ class Triple implements Serializable  {
     }
 
     Triple(MarkTable.Group groupLeft, MarkTable.Group groupRight, MarkTable.Group groupRelation, int relationId){
+        id = "m" + Document.genId(19);
         left_start = groupLeft.wordTokens.getFirst().start;
         left_end = groupLeft.wordTokens.getLast().end;
         left_entity = groupLeft.getEntityName();
