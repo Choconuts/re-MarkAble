@@ -19,7 +19,7 @@
             android:background="@drawable/red_bg"
             android:gravity="center"
             android:text="删 除"
-            android:textColor="#DDFFFF" />
+            android:textColor="#FFFFFF" />
 
         <RelativeLayout
             android:id="@+id/layout_content"

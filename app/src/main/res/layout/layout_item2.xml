@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.example.choconut.re_markable.SlidingButton
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sb_view"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_marginBottom="1dp"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    tools:ignore="MissingDefaultResource">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/layout_content"
+            android:background="@drawable/blue_bg"
+            android:gravity="center"
+            android:text="确 认"
+            android:textColor="#DDFFFF" />
 
 
         <!--删除按钮-->
@@ -22,13 +33,14 @@
             android:background="@drawable/red_bg"
             android:gravity="center"
             android:text="删 除2"
-            android:textColor="#DDFFFF" />
+            android:textColor="#DDFFFF"
+            android:layout_toEndOf="@+id/layout_content" />
 
         <RelativeLayout
             android:id="@+id/layout_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical">
+            android:gravity="clip_horizontal">
             <!--图标-->
             <ImageView
                 android:id="@+id/img"

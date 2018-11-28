@@ -90,16 +90,22 @@ public class MarkTable implements Serializable {
         MarkTable.Group s = findByStart(triple.left_start);
         MarkTable.Group e = findByEnd(triple.left_end);
         if (s == null || e == null) return false;
-        triple.leftGroupId = combine(s, e).id;
+        Group group = combine(s, e);
+        group.occupate.add(triple.id);
+        triple.leftGroupId = group.id;
         s = findByStart(triple.right_start);
         e = findByEnd(triple.right_end);
         if (s == null || e == null) return false;
-        triple.rightGroupId = combine(s, e).id;
+        group = combine(s, e);
+        group.occupate.add(triple.id);
+        triple.leftGroupId = group.id;
         if (triple.relation_start != -1 && triple.relation_end != -1){
             s = findByStart(triple.relation_start);
             e = findByEnd(triple.relation_end);
             if (s == null || e == null) return false;
-            triple.relationGroupId = combine(s, e).id;
+            Group group2 = combine(s, e);
+            group2.occupate.add(triple.id);
+            triple.leftGroupId = group2.id;
         }
         return true;
     }
@@ -119,6 +125,9 @@ public class MarkTable implements Serializable {
         for (Group group: article) {
             if (group.id.equals(id)) {
                 return group;
+            }
+            else{
+                return null;
             }
         }
         return null;
